@@ -1,0 +1,35 @@
+{
+    "name": "Presupuesto",
+    "short_name": "Presupuesto",
+    "description": "Personal finance tracking for couples in Mexico",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#0f172a",
+    "theme_color": "#0f172a",
+    "orientation": "portrait",
+    "icons": [
+        {
+            "src": "/icons/icon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "any"
+        }
+    ],
+    "categories": [
+        "finance",
+        "productivity"
+    ],
+    "shortcuts": [
+        {
+            "name": "Add Expense",
+            "short_name": "Add",
+            "url": "/add",
+            "icons": [
+                {
+                    "src": "/icons/icon-96x96.png",
+                    "sizes": "96x96"
+                }
+            ]
+        }
+    ]
+}

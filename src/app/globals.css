@@ -1,26 +1,162 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Neo-Brutalist Color Palette */
+  --background: #fffdf5; /* Warm Cream/Off-white */
+  --surface: #ffffff; /* Pure White */
+  --text: #050505; /* Near Black */
+  --border: #050505; /* Near Black */
+  --primary: #ff6b6b; /* Retro Red/Pink */
+  --secondary: #4ecdc4; /* Teal/Mint */
+  --highlight: #ffe66d; /* Vibrant Yellow */
 }
 
 @theme inline {
   --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-foreground: var(--text);
+  --color-surface: var(--surface);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-highlight: var(--highlight);
+  --font-heading: var(--font-lexend-mega);
+  --font-mono: var(--font-space-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Neo-Brutalist Base Styles */
+body {
+  background: var(--background);
+  color: var(--text);
+  font-family: system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+  min-height: 100dvh;
+  /* Subtle dot pattern for Neo-Brutalist texture */
+  background-image: radial-gradient(circle, rgba(5, 5, 5, 0.03) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Safe area padding for iOS */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+.pt-safe {
+  padding-top: env(safe-area-inset-top, 0);
+}
+
+/* Hide scrollbar but keep functionality */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* PWA standalone mode adjustments */
+@media (display-mode: standalone) {
+  body {
+    -webkit-user-select: none;
+    user-select: none;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Custom animations */
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.3s ease-out;
+}
+
+/* Safe area for header */
+.safe-area-top {
+  padding-top: env(safe-area-inset-top, 0);
+}
+
+/* Number input without spinners */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* Prevent text selection on keypad buttons */
+.keypad-btn {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Smooth touch feedback - Neo-Brutalist Press Effect */
+button:active {
+  transform: translate(4px, 4px);
+}
+
+/* Neo-Brutalist Card/Container Styles */
+.neo-card {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  box-shadow: 4px 4px 0px 0px var(--border);
+  border-radius: 12px;
+}
+
+.neo-card:active {
+  transform: translate(4px, 4px);
+  box-shadow: none;
+}
+
+/* Neo-Brutalist Button */
+.neo-btn {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  box-shadow: 4px 4px 0px 0px var(--border);
+  border-radius: 8px;
+  font-weight: 700;
+  transition: none;
+}
+
+.neo-btn:active {
+  transform: translate(4px, 4px);
+  box-shadow: none;
+}
+
+/* Hard Progress Bar */
+.neo-progress {
+  height: 20px;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.neo-progress-fill {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+/* Category Icon Box */
+.neo-icon-box {
+  width: 48px;
+  height: 48px;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface);
 }
