@@ -26,6 +26,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from "recharts";
+import { renderAppIcon } from "@/lib/icons";
 
 export default function ReportsPage() {
   const { user, categories } = useAuth();
@@ -345,7 +346,13 @@ export default function ReportsPage() {
                           className="w-10 h-10 rounded-lg border-2 border-[#050505] flex items-center justify-center text-lg"
                           style={{ backgroundColor: budget.color + "40" }}
                         >
-                          {budget.icon}
+                          <span style={{ color: budget.color }}>
+                            {renderAppIcon(budget.icon, {
+                              className: "w-5 h-5",
+                              fallback: "Wallet",
+                              textClassName: "text-lg leading-none",
+                            })}
+                          </span>
                         </div>
                         <div>
                           <p className="font-bold text-[#050505]">

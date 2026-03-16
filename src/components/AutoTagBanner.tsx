@@ -31,7 +31,7 @@ export function AutoTagBanner({ budgets, onDismiss }: AutoTagBannerProps) {
           </div>
           <button
             onClick={() => onDismiss(budget.id)}
-            className="p-1 text-amber-400 hover:text-amber-300 shrink-0"
+            className="p-1 text-amber-400 hover:text-amber-300 shrink-0 cursor-pointer"
             aria-label="Dismiss"
           >
             <X className="w-4 h-4" />

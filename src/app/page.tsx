@@ -367,7 +367,7 @@ export default function HomePage() {
             </Link>
             <button
               onClick={signOut}
-              className="p-2 text-[#050505] hover:bg-[#FF6B6B] hover:text-white rounded-lg transition-colors"
+              className="p-2 text-[#050505] hover:bg-[#FF6B6B] hover:text-white rounded-lg transition-colors cursor-pointer"
             >
               <LogOut className="w-5 h-5" />
             </button>
@@ -445,7 +445,7 @@ export default function HomePage() {
               </h2>
               <button
                 onClick={() => setEditingTransaction(null)}
-                className="text-[#050505] hover:bg-[#FF6B6B] hover:text-white p-1.5 rounded-lg transition-colors"
+                className="text-[#050505] hover:bg-[#FF6B6B] hover:text-white p-1.5 rounded-lg transition-colors cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -515,7 +515,7 @@ export default function HomePage() {
                         onClick={() =>
                           setEditForm({ ...editForm, category_id: cat.id })
                         }
-                        className={`flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-bold border-2 border-[#050505] transition-all ${
+                        className={`flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-bold border-2 border-[#050505] transition-all cursor-pointer ${
                           editForm.category_id === cat.id
                             ? "bg-[#FFE66D] text-[#050505] shadow-[2px_2px_0px_0px_#050505]"
                             : "bg-white text-[#050505] hover:translate-x-[2px] hover:translate-y-[2px]"
@@ -595,13 +595,13 @@ export default function HomePage() {
             <div className="sticky bottom-0 bg-white border-t-2 border-[#050505] px-4 py-3 flex gap-3">
               <button
                 onClick={() => setEditingTransaction(null)}
-                className="flex-1 px-4 py-3 rounded-xl bg-white border-2 border-[#050505] text-[#050505] font-bold hover:bg-[#FFFDF5] transition active:translate-x-[2px] active:translate-y-[2px]"
+                className="flex-1 px-4 py-3 rounded-xl bg-white border-2 border-[#050505] text-[#050505] font-bold hover:bg-[#FFFDF5] transition active:translate-x-[2px] active:translate-y-[2px] cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSaveEdit}
-                className="flex-1 px-4 py-3 rounded-xl bg-[#4ECDC4] border-2 border-[#050505] shadow-[4px_4px_0px_0px_#050505] text-white font-bold active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all flex items-center justify-center gap-2"
+                className="flex-1 px-4 py-3 rounded-xl bg-[#4ECDC4] border-2 border-[#050505] shadow-[4px_4px_0px_0px_#050505] text-white font-bold active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all flex items-center justify-center gap-2 cursor-pointer"
               >
                 <Save className="w-4 h-4" />
                 Save Changes

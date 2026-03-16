@@ -7,42 +7,74 @@ import { supabase } from "@/lib/supabase";
 import { BottomNav } from "@/components/BottomNav";
 import { BudgetCard } from "@/components/BudgetCard";
 import { AutoTagBanner } from "@/components/AutoTagBanner";
-import { ArrowLeft, Plus, TrendingUp } from "lucide-react";
+import { ArrowLeft, Plus, TrendingUp, User, Users } from "lucide-react";
 import Link from "next/link";
 import { getBudgetPeriod } from "@/lib/budgetPeriod";
-import type { BudgetWithSpent, Budget, BudgetInput } from "@/lib/types";
+import type {
+  BudgetWithSpent,
+  Budget,
+  BudgetInput,
+  BudgetScope,
+} from "@/lib/types";
+
+function createDefaultFormData(
+  currency: string,
+  scope: BudgetScope
+): BudgetInput {
+  return {
+    name: "",
+    tag: "",
+    amount: 0,
+    currency,
+    period_type: "monthly",
+    scope,
+    icon: "wallet",
+    color: "#6366f1",
+    rollover_enabled: false,
+    auto_tag_new_transactions: false,
+  };
+}
 
 export default function BudgetsPage() {
-  const { user } = useAuth();
-  const { defaultCurrency, autoTagBudgets, setAutoTagBudgets } = useApp();
+  const { user, profile } = useAuth();
+  const { viewMode, defaultCurrency, autoTagBudgets, setAutoTagBudgets } =
+    useApp();
   const [budgets, setBudgets] = useState<BudgetWithSpent[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [editingBudget, setEditingBudget] = useState<BudgetWithSpent | null>(
     null
   );
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState<BudgetInput>({
-    name: "",
-    tag: "",
-    amount: 0,
-    currency: defaultCurrency,
-    period_type: "monthly",
-    scope: "personal",
-    icon: "wallet",
-    color: "#6366f1",
-    rollover_enabled: false,
-    auto_tag_new_transactions: false,
-  });
+  const defaultScope: BudgetScope =
+    viewMode === "household" && profile?.household_id ? "household" : "personal";
+  const [formData, setFormData] = useState<BudgetInput>(() =>
+    createDefaultFormData(defaultCurrency, defaultScope)
+  );
+  const hasHousehold = Boolean(profile?.household_id);
 
   const loadBudgets = useCallback(async () => {
     if (!user) return;
 
-    const { data: budgetData } = await supabase
+    let budgetQuery = supabase
       .from("budgets")
       .select("*")
-      .eq("user_id", user.id)
       .eq("is_archived", false)
       .order("created_at", { ascending: false });
+
+    if (viewMode === "household") {
+      if (!profile?.household_id) {
+        setBudgets([]);
+        return;
+      }
+
+      budgetQuery = budgetQuery
+        .eq("scope", "household")
+        .eq("household_id", profile.household_id);
+    } else {
+      budgetQuery = budgetQuery.eq("scope", "personal").eq("user_id", user.id);
+    }
+
+    const { data: budgetData } = await budgetQuery;
 
     if (budgetData) {
       const budgetsWithSpent: BudgetWithSpent[] = await Promise.all(
@@ -51,13 +83,19 @@ export default function BudgetsPage() {
           const startStr = start.toISOString().split("T")[0];
           const endStr = end.toISOString().split("T")[0];
 
-          const { data: spentData } = await supabase
+          let spentQuery = supabase
             .from("transactions")
             .select("amount, original_currency, exchange_rate_used")
             .contains("tags", [budget.tag])
             .eq("type", "expense")
             .gte("date", startStr)
             .lte("date", endStr);
+
+          if (budget.scope === "personal") {
+            spentQuery = spentQuery.eq("user_id", user.id);
+          }
+
+          const { data: spentData } = await spentQuery;
 
           const spent = (spentData || []).reduce((sum, t) => {
             const amount =
@@ -85,7 +123,7 @@ export default function BudgetsPage() {
 
       setBudgets(budgetsWithSpent);
     }
-  }, [user]);
+  }, [profile?.household_id, user, viewMode]);
 
   useEffect(() => {
     loadBudgets();
@@ -94,6 +132,11 @@ export default function BudgetsPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e?.preventDefault();
     if (!user) return;
+
+    if (formData.scope === "household" && !profile?.household_id) {
+      alert("Join or create a household before creating a household budget.");
+      return;
+    }
 
     setLoading(true);
 
@@ -109,8 +152,9 @@ export default function BudgetsPage() {
         color: formData.color || "#6366f1",
         rollover_enabled: formData.rollover_enabled || false,
         auto_tag_new_transactions: formData.auto_tag_new_transactions || false,
-        user_id: user.id,
-        household_id: null,
+        user_id: formData.scope === "personal" ? user.id : null,
+        household_id:
+          formData.scope === "household" ? profile?.household_id || null : null,
       };
 
       if (
@@ -150,18 +194,13 @@ export default function BudgetsPage() {
   };
 
   const resetForm = () => {
-    setFormData({
-      name: "",
-      tag: "",
-      amount: 0,
-      currency: defaultCurrency,
-      period_type: "monthly",
-      scope: "personal",
-      icon: "wallet",
-      color: "#6366f1",
-      rollover_enabled: false,
-      auto_tag_new_transactions: false,
-    });
+    setFormData(createDefaultFormData(defaultCurrency, defaultScope));
+  };
+
+  const openCreateModal = () => {
+    setEditingBudget(null);
+    setFormData(createDefaultFormData(defaultCurrency, defaultScope));
+    setShowModal(true);
   };
 
   const handleEdit = (budget: BudgetWithSpent) => {
@@ -218,12 +257,8 @@ export default function BudgetsPage() {
           </Link>
           <h1 className="text-xl font-bold text-[#050505] flex-1" style={{ fontFamily: "var(--font-lexend-mega)" }}>Budgets</h1>
           <button
-            onClick={() => {
-              setEditingBudget(null);
-              resetForm();
-              setShowModal(true);
-            }}
-            className="p-2 text-[#050505] hover:bg-[#FF6B6B] hover:text-white rounded-lg transition-colors"
+            onClick={openCreateModal}
+            className="p-2 text-[#050505] hover:bg-[#FF6B6B] hover:text-white rounded-lg transition-colors cursor-pointer"
           >
             <Plus className="w-6 h-6" />
           </button>
@@ -247,8 +282,8 @@ export default function BudgetsPage() {
               Create budgets to track your spending
             </p>
             <button
-              onClick={() => setShowModal(true)}
-              className="bg-[#FF6B6B] border-2 border-[#050505] shadow-[4px_4px_0px_0px_#050505] text-white px-6 py-3 rounded-xl font-bold active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all"
+              onClick={openCreateModal}
+              className="bg-[#FF6B6B] border-2 border-[#050505] shadow-[4px_4px_0px_0px_#050505] text-white px-6 py-3 rounded-xl font-bold active:translate-x-1 active:translate-y-1 active:shadow-none transition-all cursor-pointer"
             >
               Create Your First Budget
             </button>
@@ -298,6 +333,69 @@ export default function BudgetsPage() {
             </h2>
 
             <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-bold text-[#050505] mb-2 uppercase tracking-wide font-mono">
+                  Budget Level
+                </label>
+                <div className="grid grid-cols-2 gap-3">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setFormData({
+                        ...formData,
+                        scope: "personal",
+                      })
+                    }
+                    className={`rounded-xl border-2 px-4 py-3 text-left transition-colors cursor-pointer ${
+                      formData.scope === "personal"
+                        ? "border-[#050505] bg-[#FFE66D] text-[#050505]"
+                        : "border-[#050505] bg-white text-[#050505]"
+                    }`}
+                  >
+                    <span className="flex items-center gap-2 font-bold">
+                      <User className="w-4 h-4" />
+                      Personal
+                    </span>
+                    <span className="mt-1 block text-xs opacity-70 font-mono">
+                      Only for your own spending.
+                    </span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      hasHousehold &&
+                      setFormData({
+                        ...formData,
+                        scope: "household",
+                      })
+                    }
+                    disabled={!hasHousehold}
+                    className={`rounded-xl border-2 px-4 py-3 text-left transition-colors ${
+                      formData.scope === "household"
+                        ? "border-[#050505] bg-[#4ECDC4] text-white"
+                        : "border-[#050505] bg-white text-[#050505]"
+                    } ${
+                      hasHousehold
+                        ? "cursor-pointer"
+                        : "cursor-not-allowed opacity-50"
+                    }`}
+                  >
+                    <span className="flex items-center gap-2 font-bold">
+                      <Users className="w-4 h-4" />
+                      Household
+                    </span>
+                    <span className="mt-1 block text-xs opacity-70 font-mono">
+                      Shared across your household.
+                    </span>
+                  </button>
+                </div>
+                {!hasHousehold && (
+                  <p className="text-xs text-[#050505] opacity-60 mt-2 font-mono">
+                    Household budgets are available after you join or create a household in Settings.
+                  </p>
+                )}
+              </div>
+
               <div>
                 <label className="block text-sm font-bold text-[#050505] mb-2 uppercase tracking-wide font-mono">
                   Budget Name
@@ -488,14 +586,14 @@ export default function BudgetsPage() {
                     setShowModal(false);
                     setEditingBudget(null);
                   }}
-                  className="flex-1 bg-white border-2 border-[#050505] text-[#050505] py-3 rounded-xl font-bold hover:bg-[#FFFDF5] transition active:translate-x-[2px] active:translate-y-[2px]"
+                  className="flex-1 bg-white border-2 border-[#050505] text-[#050505] py-3 rounded-xl font-bold hover:bg-[#FFFDF5] transition active:translate-x-0.5 active:translate-y-0.5 cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={loading}
-                  className="flex-1 bg-[#4ECDC4] border-2 border-[#050505] shadow-[4px_4px_0px_0px_#050505] text-white py-3 rounded-xl font-bold active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all disabled:opacity-50"
+                  className="flex-1 bg-[#4ECDC4] border-2 border-[#050505] shadow-[4px_4px_0px_0px_#050505] text-white py-3 rounded-xl font-bold active:translate-x-1 active:translate-y-1 active:shadow-none transition-all disabled:opacity-50 cursor-pointer"
                 >
                   {loading ? "Saving..." : editingBudget ? "Update" : "Create"}
                 </button>

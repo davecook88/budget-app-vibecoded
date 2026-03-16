@@ -1,21 +1,28 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/contexts/AuthContext";
-import { Users, CheckCircle, XCircle, Loader2 } from "lucide-react";
+import { CheckCircle, XCircle, Loader2 } from "lucide-react";
 import Link from "next/link";
 
-export default function InvitePage({ params }: { params: { code: string } }) {
+export default function InvitePage() {
   const router = useRouter();
+  const params = useParams<{ code: string }>();
   const { user, refreshProfile } = useAuth();
   const [status, setStatus] = useState<"loading" | "success" | "error">("loading");
   const [message, setMessage] = useState("");
-  const [householdName, setHouseholdName] = useState("");
+  const inviteCode = params?.code;
 
   useEffect(() => {
     const acceptInvite = async () => {
+      if (!inviteCode) {
+        setStatus("error");
+        setMessage("This invitation link is invalid or incomplete");
+        return;
+      }
+
       if (!user) {
         setStatus("error");
         setMessage("You must be logged in to accept an invitation");
@@ -27,18 +34,19 @@ export default function InvitePage({ params }: { params: { code: string } }) {
         const { data: inviteData } = await supabase
           .from("household_invitations")
           .select("household_id, households(name)")
-          .eq("code", params.code)
+          .eq("code", inviteCode)
           .is("used_at", null)
           .gt("expires_at", new Date().toISOString())
           .maybeSingle();
 
-        if (inviteData?.households) {
-          setHouseholdName((inviteData.households as any).name);
-        }
+        const nextHouseholdName =
+          inviteData?.households && typeof inviteData.households === "object" && "name" in inviteData.households
+            ? String(inviteData.households.name)
+            : "";
 
         // Accept the invitation
         const { error } = await supabase.rpc("accept_household_invitation", {
-          p_code: params.code,
+          p_code: inviteCode,
         });
 
         if (error) {
@@ -49,7 +57,7 @@ export default function InvitePage({ params }: { params: { code: string } }) {
         await refreshProfile();
 
         setStatus("success");
-        setMessage(`You've joined ${householdName || "the household"}!`);
+        setMessage(`You've joined ${nextHouseholdName || "the household"}!`);
 
         // Redirect to home after 2 seconds
         setTimeout(() => {
@@ -70,7 +78,7 @@ export default function InvitePage({ params }: { params: { code: string } }) {
     };
 
     void acceptInvite();
-  }, [user, params.code, refreshProfile, router, householdName]);
+  }, [inviteCode, refreshProfile, router, user]);
 
   if (!user) {
     return (

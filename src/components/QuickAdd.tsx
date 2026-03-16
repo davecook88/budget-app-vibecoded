@@ -107,7 +107,7 @@ export function QuickAdd({
           <div className="flex items-center justify-between mb-4">
             <button
               onClick={() => setShowKeypad(false)}
-              className="text-[#050505] p-2 hover:bg-[#FF6B6B] hover:text-white rounded-lg transition-colors"
+              className="text-[#050505] p-2 hover:bg-[#FF6B6B] hover:text-white rounded-lg transition-colors cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
@@ -119,7 +119,7 @@ export function QuickAdd({
             <button
               onClick={handleKeypadSubmit}
               disabled={!keypadAmount}
-              className="text-white bg-[#4ECDC4] p-2 rounded-lg disabled:opacity-50 border-2 border-[#050505]"
+              className="text-white bg-[#4ECDC4] p-2 rounded-lg disabled:opacity-50 border-2 border-[#050505] cursor-pointer"
             >
               <Send className="w-5 h-5" />
             </button>
@@ -132,7 +132,7 @@ export function QuickAdd({
                   key={key}
                   onClick={() => handleKeypadPress(key)}
                   className="h-14 text-xl font-bold bg-white border-2 border-[#050505] text-[#050505] rounded-xl 
-                  active:translate-x-[2px] active:translate-y-[2px] transition-all font-mono"
+                  active:translate-x-[2px] active:translate-y-[2px] transition-all font-mono cursor-pointer"
                 >
                   {key}
                 </button>
@@ -141,7 +141,7 @@ export function QuickAdd({
           </div>
           <button
             onClick={() => handleKeypadPress("C")}
-            className="w-full mt-2 h-12 text-lg font-bold bg-[#FF6B6B] border-2 border-[#050505] text-white rounded-xl"
+            className="w-full mt-2 h-12 text-lg font-bold bg-[#FF6B6B] border-2 border-[#050505] text-white rounded-xl cursor-pointer"
           >
             Clear
           </button>
@@ -154,7 +154,7 @@ export function QuickAdd({
           <button
             type="button"
             onClick={() => setShowKeypad(true)}
-            className="p-3 bg-white border-2 border-[#050505] rounded-xl text-[#050505] hover:bg-[#FFE66D] transition-colors active:translate-x-[2px] active:translate-y-[2px]"
+            className="p-3 bg-white border-2 border-[#050505] rounded-xl text-[#050505] hover:bg-[#FFE66D] transition-colors active:translate-x-[2px] active:translate-y-[2px] cursor-pointer"
           >
             <Calculator className="w-5 h-5" />
           </button>
@@ -172,7 +172,7 @@ export function QuickAdd({
             type="submit"
             disabled={!input.trim() || isSubmitting}
             className="p-3 bg-[#4ECDC4] border-2 border-[#050505] shadow-[2px_2px_0px_0px_#050505] rounded-xl text-white
-              disabled:opacity-50 transition-all active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
+              disabled:opacity-50 transition-all active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer"
           >
             <Send className="w-5 h-5" />
           </button>

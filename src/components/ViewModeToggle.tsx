@@ -10,7 +10,7 @@ export function ViewModeToggle() {
     <div className="flex bg-white border-2 border-[#050505] rounded-xl p-1">
       <button
         onClick={() => setViewMode("personal")}
-        className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all
+        className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all cursor-pointer
           ${
             viewMode === "personal"
               ? "bg-[#FFE66D] text-[#050505] border-2 border-[#050505]"
@@ -22,7 +22,7 @@ export function ViewModeToggle() {
       </button>
       <button
         onClick={() => setViewMode("household")}
-        className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all
+        className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all cursor-pointer
           ${
             viewMode === "household"
               ? "bg-[#FFE66D] text-[#050505] border-2 border-[#050505]"

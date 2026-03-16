@@ -174,7 +174,7 @@ export function TransactionList({
                             e.stopPropagation();
                             onEdit(transaction);
                           }}
-                          className="p-1.5 rounded-lg border-2 border-[#050505] bg-white hover:bg-[#4ECDC4] text-[#050505] transition active:translate-x-[2px] active:translate-y-[2px]"
+                          className="p-1.5 rounded-lg border-2 border-[#050505] bg-white hover:bg-[#4ECDC4] text-[#050505] transition active:translate-x-[2px] active:translate-y-[2px] cursor-pointer"
                           title="Edit"
                         >
                           <Edit className="w-4 h-4" />
@@ -186,7 +186,7 @@ export function TransactionList({
                             e.stopPropagation();
                             onDelete(transaction);
                           }}
-                          className="p-1.5 rounded-lg border-2 border-[#050505] bg-white hover:bg-[#FF6B6B] hover:text-white text-[#050505] transition active:translate-x-[2px] active:translate-y-[2px]"
+                          className="p-1.5 rounded-lg border-2 border-[#050505] bg-white hover:bg-[#FF6B6B] hover:text-white text-[#050505] transition active:translate-x-[2px] active:translate-y-[2px] cursor-pointer"
                           title="Delete"
                         >
                           <Trash2 className="w-4 h-4" />

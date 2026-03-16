@@ -46,7 +46,7 @@ export function BudgetDrillDownModal({
           </div>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-white"
+            className="text-slate-400 hover:text-white cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>

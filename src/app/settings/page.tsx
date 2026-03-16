@@ -320,7 +320,7 @@ export default function SettingsPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-[#4ECDC4] border-2 border-[#050505] shadow-[4px_4px_0px_0px_#050505] text-white py-3 rounded-xl font-bold active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all disabled:opacity-50"
+                className="w-full bg-[#4ECDC4] border-2 border-[#050505] shadow-[4px_4px_0px_0px_#050505] text-white py-3 rounded-xl font-bold active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all disabled:opacity-50 cursor-pointer"
               >
                 {loading ? "Updating..." : "Update Profile"}
               </button>
@@ -341,7 +341,7 @@ export default function SettingsPage() {
             <div className="grid grid-cols-2 gap-3">
               <button
                 onClick={() => handleUpdateCurrency("MXN")}
-                className={`py-3 rounded-xl font-bold border-2 border-[#050505] transition-all ${
+                className={`py-3 rounded-xl font-bold border-2 border-[#050505] transition-all cursor-pointer ${
                   defaultCurrency === "MXN"
                     ? "bg-[#4ECDC4] text-white shadow-[2px_2px_0px_0px_#050505]"
                     : "bg-white text-[#050505] hover:bg-[#FFFDF5]"
@@ -351,7 +351,7 @@ export default function SettingsPage() {
               </button>
               <button
                 onClick={() => handleUpdateCurrency("USD")}
-                className={`py-3 rounded-xl font-bold border-2 border-[#050505] transition-all ${
+                className={`py-3 rounded-xl font-bold border-2 border-[#050505] transition-all cursor-pointer ${
                   defaultCurrency === "USD"
                     ? "bg-[#4ECDC4] text-white shadow-[2px_2px_0px_0px_#050505]"
                     : "bg-white text-[#050505] hover:bg-[#FFFDF5]"
@@ -388,7 +388,7 @@ export default function SettingsPage() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-[#4ECDC4] border-2 border-[#050505] shadow-[4px_4px_0px_0px_#050505] text-white py-3 rounded-xl font-bold active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all disabled:opacity-50"
+                  className="w-full bg-[#4ECDC4] border-2 border-[#050505] shadow-[4px_4px_0px_0px_#050505] text-white py-3 rounded-xl font-bold active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all disabled:opacity-50 cursor-pointer"
                 >
                   {loading ? "Creating..." : "Create Household"}
                 </button>
@@ -430,7 +430,7 @@ export default function SettingsPage() {
                   <button
                     onClick={handleGenerateInvite}
                     disabled={loading}
-                    className="w-full bg-[#4ECDC4] border-2 border-[#050505] shadow-[4px_4px_0px_0px_#050505] text-white py-3 rounded-xl font-bold active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all disabled:opacity-50"
+                    className="w-full bg-[#4ECDC4] border-2 border-[#050505] shadow-[4px_4px_0px_0px_#050505] text-white py-3 rounded-xl font-bold active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all disabled:opacity-50 cursor-pointer"
                   >
                     {loading ? "Generating..." : "Generate Invite Link"}
                   </button>
@@ -441,7 +441,7 @@ export default function SettingsPage() {
                     </div>
                     <button
                       onClick={handleCopyInvite}
-                      className="w-full bg-white border-2 border-[#050505] shadow-[2px_2px_0px_0px_#050505] text-[#050505] py-3 rounded-xl font-bold active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all flex items-center justify-center gap-2"
+                      className="w-full bg-white border-2 border-[#050505] shadow-[2px_2px_0px_0px_#050505] text-[#050505] py-3 rounded-xl font-bold active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all flex items-center justify-center gap-2 cursor-pointer"
                     >
                       {copied ? (
                         <>
@@ -467,7 +467,7 @@ export default function SettingsPage() {
                 <button
                   onClick={handleLeaveHousehold}
                   disabled={loading}
-                  className="w-full bg-[#FF6B6B] border-2 border-[#050505] shadow-[4px_4px_0px_0px_#050505] text-white py-3 rounded-xl font-bold active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all disabled:opacity-50"
+                  className="w-full bg-[#FF6B6B] border-2 border-[#050505] shadow-[4px_4px_0px_0px_#050505] text-white py-3 rounded-xl font-bold active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all disabled:opacity-50 cursor-pointer"
                 >
                   Leave Household
                 </button>
@@ -522,7 +522,7 @@ export default function SettingsPage() {
 
             <button
               onClick={handleClearLocalData}
-              className="w-full bg-white border-2 border-[#050505] shadow-[2px_2px_0px_0px_#050505] text-[#050505] py-3 rounded-xl font-bold active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all"
+              className="w-full bg-white border-2 border-[#050505] shadow-[2px_2px_0px_0px_#050505] text-[#050505] py-3 rounded-xl font-bold active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all cursor-pointer"
             >
               Clear Offline Data
             </button>
@@ -555,7 +555,7 @@ export default function SettingsPage() {
             </p>
             <button
               onClick={handleDeleteAccount}
-              className="w-full bg-[#050505] border-2 border-white text-white py-3 rounded-xl font-bold hover:bg-white hover:text-[#FF6B6B] transition-all"
+              className="w-full bg-[#050505] border-2 border-white text-white py-3 rounded-xl font-bold hover:bg-white hover:text-[#FF6B6B] transition-all cursor-pointer"
             >
               Delete My Account
             </button>
@@ -565,7 +565,7 @@ export default function SettingsPage() {
         <div className="pt-4">
           <button
             onClick={signOut}
-            className="w-full bg-white border-2 border-[#050505] shadow-[4px_4px_0px_0px_#050505] text-[#050505] py-3 rounded-xl font-bold active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all"
+            className="w-full bg-white border-2 border-[#050505] shadow-[4px_4px_0px_0px_#050505] text-[#050505] py-3 rounded-xl font-bold active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all cursor-pointer"
           >
             Sign Out
           </button>

@@ -95,7 +95,7 @@ export default function LoginPage() {
             disabled={loading || !isConfigured}
             className="w-full bg-[#FF6B6B] border-2 border-[#050505] shadow-[4px_4px_0px_0px_#050505] text-white py-3 rounded-xl font-bold 
               active:translate-x-[4px] active:translate-y-[4px] active:shadow-none disabled:opacity-50 
-              transition-all flex items-center justify-center gap-2"
+              transition-all flex items-center justify-center gap-2 cursor-pointer"
           >
             {loading ? (
               <div className="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full" />

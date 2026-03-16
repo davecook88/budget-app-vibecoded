@@ -6,16 +6,13 @@ import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/lib/supabase";
 import { TransactionList } from "@/components/TransactionList";
 import { BottomNav } from "@/components/BottomNav";
-import { ArrowLeft, Filter, Calendar, Search, X, Save } from "lucide-react";
+import { ArrowLeft, Filter, Calendar, Search } from "lucide-react";
 import Link from "next/link";
 import type { Transaction } from "@/lib/types";
-import { CurrencySelector } from "@/components/CurrencySelector";
-import * as LucideIcons from "lucide-react";
-import { getExchangeRate } from "@/lib/exchangeRates";
 
 export default function TransactionsPage() {
   const { user, categories } = useAuth();
-  const { viewMode, defaultCurrency } = useApp();
+  const { viewMode } = useApp();
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [filteredTransactions, setFilteredTransactions] = useState<
     Transaction[]
@@ -25,17 +22,6 @@ export default function TransactionsPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedMonth, setSelectedMonth] = useState<string>("all");
   const [showFilters, setShowFilters] = useState(false);
-  
-  // Edit modal state
-  const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
-  const [editForm, setEditForm] = useState({
-    amount: "",
-    description: "",
-    category_id: "",
-    tags: [] as string[],
-    date: "",
-    original_currency: "",
-  });
 
   const loadTransactions = useCallback(async () => {
     if (!user) return;
@@ -101,92 +87,6 @@ export default function TransactionsPage() {
     setFilteredTransactions(filtered);
   }, [searchQuery, selectedCategory, selectedMonth, transactions]);
 
-  // Handle edit transaction
-  const handleEdit = (transaction: Transaction) => {
-    setEditingTransaction(transaction);
-    setEditForm({
-      amount: transaction.amount.toString(),
-      description: transaction.description || "",
-      category_id: transaction.category_id || "",
-      tags: transaction.tags || [],
-      date: transaction.date,
-      original_currency: transaction.original_currency,
-    });
-  };
-
-  // Handle save edited transaction
-  const handleSaveEdit = async () => {
-    if (!editingTransaction || !editForm.amount) return;
-
-    try {
-      // Get exchange rate if currency changed
-      let exchangeRate = editingTransaction.exchange_rate_used;
-      if (editForm.original_currency !== editingTransaction.original_currency) {
-        try {
-          exchangeRate = await getExchangeRate(editForm.original_currency, defaultCurrency);
-        } catch (error) {
-          console.error("Error getting exchange rate:", error);
-        }
-      }
-
-      const { error } = await supabase
-        .from("transactions")
-        .update({
-          amount: parseFloat(editForm.amount),
-          description: editForm.description || null,
-          category_id: editForm.category_id || null,
-          tags: editForm.tags,
-          date: editForm.date,
-          original_currency: editForm.original_currency,
-          exchange_rate_used: exchangeRate,
-          updated_at: new Date().toISOString(),
-        })
-        .eq("id", editingTransaction.id);
-
-      if (error) throw error;
-
-      // Reload transactions
-      await loadTransactions();
-      setEditingTransaction(null);
-    } catch (error) {
-      console.error("Error updating transaction:", error);
-      alert("Failed to update transaction");
-    }
-  };
-
-  // Handle delete transaction
-  const handleDelete = async (transaction: Transaction) => {
-    if (!confirm(`Delete transaction: ${transaction.description || "Unnamed"} for ${transaction.amount} ${transaction.original_currency}?`)) {
-      return;
-    }
-
-    try {
-      const { error } = await supabase
-        .from("transactions")
-        .delete()
-        .eq("id", transaction.id);
-
-      if (error) throw error;
-
-      // Reload transactions
-      await loadTransactions();
-    } catch (error) {
-      console.error("Error deleting transaction:", error);
-      alert("Failed to delete transaction");
-    }
-  };
-
-  // Get category icon
-  const getCategoryIcon = (categoryId: string | null) => {
-    const category = categories.find((c) => c.id === categoryId);
-    if (!category) return null;
-    
-    const iconName = category.icon.charAt(0).toUpperCase() + 
-      category.icon.slice(1).replace(/-([a-z])/g, (g) => g[1].toUpperCase());
-    const Icon = (LucideIcons as unknown as Record<string, React.ComponentType<{ className?: string }>>)[iconName] || LucideIcons.CircleDot;
-    return <Icon className="w-4 h-4" />;
-  };
-
   // Get unique months from transactions
   const availableMonths = Array.from(
     new Set(
@@ -223,7 +123,7 @@ export default function TransactionsPage() {
           <h1 className="text-xl font-bold text-white flex-1">Transactions</h1>
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className={`p-2 transition ${
+            className={`p-2 transition cursor-pointer ${
               showFilters
                 ? "text-indigo-400"
                 : "text-slate-400 hover:text-white"
@@ -300,7 +200,7 @@ export default function TransactionsPage() {
                 setSelectedCategory("all");
                 setSelectedMonth("all");
               }}
-              className="w-full py-2 text-sm text-slate-400 hover:text-white transition"
+              className="w-full py-2 text-sm text-slate-400 hover:text-white transition cursor-pointer"
             >
               Clear Filters
             </button>
@@ -356,183 +256,9 @@ export default function TransactionsPage() {
           <TransactionList
             transactions={filteredTransactions}
             categories={categories}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
           />
         )}
       </main>
-
-      {/* Edit Transaction Modal */}
-      {editingTransaction && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-4">
-          <div className="bg-slate-900 rounded-t-2xl sm:rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto border border-slate-700 shadow-xl">
-            {/* Header */}
-            <div className="sticky top-0 bg-slate-900 border-b border-slate-800 px-4 py-3 flex items-center justify-between">
-              <h2 className="text-lg font-bold text-white">Edit Transaction</h2>
-              <button
-                onClick={() => setEditingTransaction(null)}
-                className="text-slate-400 hover:text-white"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            {/* Form */}
-            <div className="p-4 space-y-4">
-              {/* Amount */}
-              <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">
-                  Amount
-                </label>
-                <div className="flex gap-2">
-                  <input
-                    type="number"
-                    step="0.01"
-                    value={editForm.amount}
-                    onChange={(e) =>
-                      setEditForm({ ...editForm, amount: e.target.value })
-                    }
-                    className="flex-1 bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    placeholder="0.00"
-                  />
-                  <div className="w-32">
-                    <CurrencySelector
-                      selectedCurrency={editForm.original_currency}
-                      onSelect={(currency) =>
-                        setEditForm({ ...editForm, original_currency: currency })
-                      }
-                      label=""
-                      showRecent={true}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Description */}
-              <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">
-                  Description
-                </label>
-                <input
-                  type="text"
-                  value={editForm.description}
-                  onChange={(e) =>
-                    setEditForm({ ...editForm, description: e.target.value })
-                  }
-                  className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  placeholder="Optional description"
-                />
-              </div>
-
-              {/* Category */}
-              <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">
-                  Category
-                </label>
-                <div className="flex flex-wrap gap-2">
-                  {categories
-                    .filter((c) => c.type === editingTransaction.type)
-                    .map((cat) => (
-                      <button
-                        key={cat.id}
-                        onClick={() =>
-                          setEditForm({ ...editForm, category_id: cat.id })
-                        }
-                        className={`flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition ${
-                          editForm.category_id === cat.id
-                            ? "bg-indigo-600 text-white"
-                            : "bg-slate-800 text-slate-300 border border-slate-700 hover:border-slate-500"
-                        }`}
-                      >
-                        <span style={{ color: cat.color }}>
-                          {getCategoryIcon(cat.id)}
-                        </span>
-                        {cat.name}
-                      </button>
-                    ))}
-                </div>
-              </div>
-
-              {/* Date */}
-              <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">
-                  Date
-                </label>
-                <input
-                  type="date"
-                  value={editForm.date}
-                  onChange={(e) =>
-                    setEditForm({ ...editForm, date: e.target.value })
-                  }
-                  className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                />
-              </div>
-
-              {/* Tags */}
-              <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">
-                  Tags
-                </label>
-                <div className="flex flex-wrap gap-2">
-                  {editForm.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm bg-emerald-600/20 text-emerald-300 border border-emerald-500/30"
-                    >
-                      #{tag}
-                      <button
-                        onClick={() =>
-                          setEditForm({
-                            ...editForm,
-                            tags: editForm.tags.filter((t) => t !== tag),
-                          })
-                        }
-                        className="hover:text-emerald-100"
-                      >
-                        <X className="w-3 h-3" />
-                      </button>
-                    </span>
-                  ))}
-                  <input
-                    type="text"
-                    placeholder="Add tag..."
-                    className="px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        const tag = e.currentTarget.value.trim().toLowerCase();
-                        if (tag && !editForm.tags.includes(tag)) {
-                          setEditForm({
-                            ...editForm,
-                            tags: [...editForm.tags, tag],
-                          });
-                          e.currentTarget.value = "";
-                        }
-                      }
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Actions */}
-            <div className="sticky bottom-0 bg-slate-900 border-t border-slate-800 px-4 py-3 flex gap-3">
-              <button
-                onClick={() => setEditingTransaction(null)}
-                className="flex-1 px-4 py-3 rounded-xl bg-slate-800 text-white font-medium hover:bg-slate-700 transition"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleSaveEdit}
-                className="flex-1 px-4 py-3 rounded-xl bg-indigo-600 text-white font-medium hover:bg-indigo-700 transition flex items-center justify-center gap-2"
-              >
-                <Save className="w-4 h-4" />
-                Save Changes
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       <BottomNav />
     </div>

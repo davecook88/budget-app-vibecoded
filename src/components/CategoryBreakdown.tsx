@@ -3,6 +3,7 @@
 import { Category, Transaction } from "@/lib/types";
 import { formatCurrency } from "@/lib/currency";
 import { useMemo } from "react";
+import { renderAppIcon } from "@/lib/icons";
 
 interface CategoryData {
   category: Category;
@@ -84,7 +85,7 @@ export function CategoryBreakdown({
         <button
           key={category.id}
           onClick={() => onCategoryClick?.(category.id)}
-          className="w-full bg-white border-2 border-[#050505] rounded-xl p-4 hover:translate-x-[2px] hover:translate-y-[2px] transition-all group"
+          className="w-full bg-white border-2 border-[#050505] rounded-xl p-4 hover:translate-x-0.5 hover:translate-y-0.5 transition-all group"
         >
           {/* Header */}
           <div className="flex items-center justify-between mb-3">
@@ -93,7 +94,12 @@ export function CategoryBreakdown({
                 className="w-10 h-10 rounded-lg border-2 border-[#050505] flex items-center justify-center text-xl"
                 style={{ backgroundColor: category.color + "40" }}
               >
-                {category.icon}
+                <span style={{ color: category.color }}>
+                  {renderAppIcon(category.icon, {
+                    className: "w-5 h-5",
+                    textClassName: "text-lg leading-none",
+                  })}
+                </span>
               </div>
               <div className="text-left">
                 <p className="font-bold text-[#050505]">{category.name}</p>

@@ -229,7 +229,7 @@ export default function TripsPage() {
               });
               setShowModal(true);
             }}
-            className="p-2 text-indigo-400 hover:text-indigo-300"
+            className="p-2 text-indigo-400 hover:text-indigo-300 cursor-pointer"
           >
             <Plus className="w-6 h-6" />
           </button>
@@ -246,7 +246,7 @@ export default function TripsPage() {
               </div>
               <button
                 onClick={handleDeactivate}
-                className="p-1.5 bg-white/20 rounded-lg hover:bg-white/30 transition"
+                className="p-1.5 bg-white/20 rounded-lg hover:bg-white/30 transition cursor-pointer"
               >
                 <Square className="w-4 h-4 text-white" />
               </button>
@@ -292,7 +292,7 @@ export default function TripsPage() {
             </p>
             <button
               onClick={() => setShowModal(true)}
-              className="bg-indigo-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-indigo-500 transition"
+              className="bg-indigo-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-indigo-500 transition cursor-pointer"
             >
               Plan Your First Trip
             </button>
@@ -333,20 +333,20 @@ export default function TripsPage() {
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => handleActivate(trip)}
-                        className="p-2 text-indigo-400 hover:text-indigo-300"
+                        className="p-2 text-indigo-400 hover:text-indigo-300 cursor-pointer"
                         title="Activate trip"
                       >
                         <Play className="w-4 h-4" />
                       </button>
                       <button
                         onClick={() => handleEdit(trip)}
-                        className="px-3 py-1 text-xs bg-slate-900 text-slate-300 rounded-lg hover:text-white"
+                        className="px-3 py-1 text-xs bg-slate-900 text-slate-300 rounded-lg hover:text-white cursor-pointer"
                       >
                         Edit
                       </button>
                       <button
                         onClick={() => handleDelete(trip.id)}
-                        className="px-3 py-1 text-xs bg-slate-900 text-red-400 rounded-lg hover:text-red-300"
+                        className="px-3 py-1 text-xs bg-slate-900 text-red-400 rounded-lg hover:text-red-300 cursor-pointer"
                       >
                         Delete
                       </button>
@@ -486,7 +486,7 @@ export default function TripsPage() {
                     onClick={() =>
                       setFormData({ ...formData, budget_currency: "MXN" })
                     }
-                    className={`py-3 rounded-xl font-semibold transition ${
+                    className={`py-3 rounded-xl font-semibold transition cursor-pointer ${
                       formData.budget_currency === "MXN"
                         ? "bg-indigo-600 text-white"
                         : "bg-slate-900 text-slate-400 border border-slate-700"
@@ -499,7 +499,7 @@ export default function TripsPage() {
                     onClick={() =>
                       setFormData({ ...formData, budget_currency: "USD" })
                     }
-                    className={`py-3 rounded-xl font-semibold transition ${
+                    className={`py-3 rounded-xl font-semibold transition cursor-pointer ${
                       formData.budget_currency === "USD"
                         ? "bg-indigo-600 text-white"
                         : "bg-slate-900 text-slate-400 border border-slate-700"
@@ -517,16 +517,16 @@ export default function TripsPage() {
                     setShowModal(false);
                     setEditingTrip(null);
                   }}
-                  className="flex-1 bg-slate-900 border border-slate-700 text-white py-3 rounded-xl font-semibold hover:bg-slate-700 transition"
+                  className="flex-1 bg-slate-900 border border-slate-700 text-white py-3 rounded-xl font-semibold hover:bg-slate-700 transition cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={loading}
-                  className="flex-1 bg-indigo-600 text-white py-3 rounded-xl font-semibold hover:bg-indigo-500 transition disabled:opacity-50"
+                  className="flex-1 bg-indigo-600 text-white py-3 rounded-xl font-semibold hover:bg-indigo-500 transition disabled:opacity-50 cursor-pointer"
                 >
-                  {loading ? "Saving..." : editingTrip ? "Update" : "Create"}
+                  {loading ? "Saving..." : editingTrip ? "Update" : "Create"}}
                 </button>
               </div>
             </form>

@@ -41,7 +41,7 @@ export function OfflineIndicator() {
         <button
           onClick={handleSync}
           disabled={syncing}
-          className="p-2 bg-white border-2 border-[#050505] rounded-lg hover:bg-[#4ECDC4] hover:text-white transition-colors active:translate-x-[2px] active:translate-y-[2px]"
+          className="p-2 bg-white border-2 border-[#050505] rounded-lg hover:bg-[#4ECDC4] hover:text-white transition-colors active:translate-x-[2px] active:translate-y-[2px] cursor-pointer"
         >
           <RefreshCw className={`w-4 h-4 ${syncing ? "animate-spin" : ""}`} />
         </button>

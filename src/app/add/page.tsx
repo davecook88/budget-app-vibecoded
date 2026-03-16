@@ -267,7 +267,7 @@ export default function AddTransactionPage() {
           </p>
           <button
             onClick={() => router.back()}
-            className="text-[#FF6B6B] hover:bg-[#FF6B6B] hover:text-white px-4 py-2 rounded-lg font-bold transition-colors border-2 border-[#050505]"
+            className="text-[#FF6B6B] hover:bg-[#FF6B6B] hover:text-white px-4 py-2 rounded-lg font-bold transition-colors border-2 border-[#050505] cursor-pointer"
           >
             Go back
           </button>
@@ -341,7 +341,7 @@ export default function AddTransactionPage() {
           {hasMoreCategories && (
             <button
               onClick={() => setShowAllCategories(!showAllCategories)}
-              className="flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs bg-white text-[#050505] border-2 border-[#050505] hover:bg-[#FFE66D] transition-colors font-bold"
+              className="flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs bg-white text-[#050505] border-2 border-[#050505] hover:bg-[#FFE66D] transition-colors font-bold cursor-pointer"
             >
               {showAllCategories ? (
                 <>
@@ -383,7 +383,7 @@ export default function AddTransactionPage() {
               if (!showTagInput)
                 setTimeout(() => tagInputRef.current?.focus(), 100);
             }}
-            className={`flex items-center gap-1 px-3 py-1.5 rounded-xl text-sm font-bold transition-colors border-2 ${
+            className={`flex items-center gap-1 px-3 py-1.5 rounded-xl text-sm font-bold transition-colors border-2 cursor-pointer ${
               showTagInput
                 ? "bg-[#4ECDC4] text-white border-[#050505]"
                 : "bg-white text-[#050505] border-dashed border-[#050505] hover:bg-[#FFE66D]"
@@ -416,7 +416,7 @@ export default function AddTransactionPage() {
             />
             <button
               onClick={addNewTag}
-              className="bg-[#4ECDC4] border-2 border-[#050505] shadow-[2px_2px_0px_0px_#050505] text-white px-4 py-2 rounded-xl text-sm font-bold active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all"
+              className="bg-[#4ECDC4] border-2 border-[#050505] shadow-[2px_2px_0px_0px_#050505] text-white px-4 py-2 rounded-xl text-sm font-bold active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all cursor-pointer"
             >
               Add
             </button>
@@ -432,7 +432,7 @@ export default function AddTransactionPage() {
             if (!showNotes)
               setTimeout(() => descriptionRef.current?.focus(), 100);
           }}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs transition-colors border-2 font-bold ${
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs transition-colors border-2 font-bold cursor-pointer ${
             description || showNotes
               ? "bg-[#FFE66D] text-[#050505] border-[#050505]"
               : "bg-white text-[#050505] opacity-60 border-[#050505] hover:opacity-100"
@@ -507,7 +507,7 @@ export default function AddTransactionPage() {
           <button
             onClick={handleSubmit}
             disabled={!amount || loading}
-            className="bg-[#4ECDC4] border-2 border-[#050505] shadow-[4px_4px_0px_0px_#050505] text-white font-bold rounded-xl active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center"
+            className="bg-[#4ECDC4] border-2 border-[#050505] shadow-[4px_4px_0px_0px_#050505] text-white font-bold rounded-xl active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center cursor-pointer"
           >
             {loading ? "..." : <Check className="w-7 h-7" />}
           </button>
@@ -541,7 +541,7 @@ function CategoryPill({
   return (
     <button
       onClick={onSelect}
-      className={`shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all border-2 border-[#050505] ${
+      className={`shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all border-2 border-[#050505] cursor-pointer ${
         isSelected
           ? "text-white shadow-[2px_2px_0px_0px_#050505]"
           : "bg-white text-[#050505] hover:translate-x-[1px] hover:translate-y-[1px]"
@@ -580,7 +580,7 @@ function KeypadButton({
   return (
     <button
       onClick={onClick}
-      className={`${baseClass} ${variantClasses[variant]} ${className}`}
+      className={`${baseClass} ${variantClasses[variant]} ${className} cursor-pointer`}
     >
       {children}
     </button>

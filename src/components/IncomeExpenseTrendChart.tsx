@@ -81,13 +81,16 @@ export function IncomeExpenseTrendChart({
 
   if (chartData.length === 0) {
     return (
-      <div className="bg-slate-800 rounded-xl p-4">
-        <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
-          <TrendingUp className="w-5 h-5 text-green-400" />
-          <TrendingDown className="w-5 h-5 text-red-400" />
+      <div className="bg-white border-2 border-[#050505] shadow-[4px_4px_0px_0px_#050505] rounded-xl p-4">
+        <h2
+          className="text-lg font-bold text-[#050505] mb-4 flex items-center gap-2"
+          style={{ fontFamily: "var(--font-lexend-mega)" }}
+        >
+          <TrendingUp className="w-5 h-5 text-[#4ECDC4]" />
+          <TrendingDown className="w-5 h-5 text-[#FF6B6B]" />
           Income vs. Expense
         </h2>
-        <div className="text-center py-8 text-slate-400">
+        <div className="text-center py-8 text-[#050505] opacity-60 font-mono">
           No transaction data for this period
         </div>
       </div>
@@ -95,40 +98,49 @@ export function IncomeExpenseTrendChart({
   }
 
   return (
-    <div className="bg-slate-800 rounded-xl p-4">
-      <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
-        <TrendingUp className="w-5 h-5 text-green-400" />
-        <TrendingDown className="w-5 h-5 text-red-400" />
+    <div className="bg-white border-2 border-[#050505] shadow-[4px_4px_0px_0px_#050505] rounded-xl p-4">
+      <h2
+        className="text-lg font-bold text-[#050505] mb-4 flex items-center gap-2"
+        style={{ fontFamily: "var(--font-lexend-mega)" }}
+      >
+        <TrendingUp className="w-5 h-5 text-[#4ECDC4]" />
+        <TrendingDown className="w-5 h-5 text-[#FF6B6B]" />
         Income vs. Expense Trend
       </h2>
       <ResponsiveContainer width="100%" height={300}>
         <LineChart data={chartData}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#475569" />
+          <CartesianGrid strokeDasharray="4 4" stroke="#050505" strokeOpacity={0.15} />
           <XAxis
             dataKey="shortDate"
-            tick={{ fill: "#94a3b8", fontSize: 12 }}
-            stroke="#475569"
+            tick={{ fill: "#050505", fontSize: 12 }}
+            stroke="#050505"
+            tickLine={false}
+            axisLine={{ strokeWidth: 2 }}
           />
           <YAxis
-            tick={{ fill: "#94a3b8", fontSize: 12 }}
-            stroke="#475569"
+            tick={{ fill: "#050505", fontSize: 12 }}
+            stroke="#050505"
+            tickLine={false}
+            axisLine={{ strokeWidth: 2 }}
           />
           <Tooltip
             contentStyle={{
-              backgroundColor: "#1e293b",
-              border: "1px solid #475569",
+              backgroundColor: "#FFFDF5",
+              border: "2px solid #050505",
               borderRadius: "8px",
+              color: "#050505",
             }}
-            labelStyle={{ color: "#f1f5f9" }}
+            cursor={{ stroke: "#050505", strokeDasharray: "4 4", strokeOpacity: 0.35 }}
+            labelStyle={{ color: "#050505", fontWeight: 700 }}
             formatter={(value) => formatCurrency(value as number, currency)}
             labelFormatter={(label) => `Date: ${label}`}
           />
-          <Legend wrapperStyle={{ paddingTop: "20px" }} />
+          <Legend wrapperStyle={{ paddingTop: "20px", color: "#050505" }} />
           <Line
             type="monotone"
             dataKey="cumIncome"
-            stroke="#10b981"
-            strokeWidth={2}
+            stroke="#4ECDC4"
+            strokeWidth={3}
             dot={false}
             name="Cumulative Income"
             isAnimationActive={false}
@@ -136,8 +148,8 @@ export function IncomeExpenseTrendChart({
           <Line
             type="monotone"
             dataKey="cumExpense"
-            stroke="#ef4444"
-            strokeWidth={2}
+            stroke="#FF6B6B"
+            strokeWidth={3}
             dot={false}
             name="Cumulative Expenses"
             isAnimationActive={false}

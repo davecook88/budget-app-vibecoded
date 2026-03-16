@@ -122,7 +122,7 @@ export default function RegisterPage() {
             disabled={loading || !isConfigured}
             className="w-full bg-indigo-600 text-white py-3 rounded-xl font-semibold 
               hover:bg-indigo-500 disabled:opacity-50 disabled:hover:bg-indigo-600 
-              transition flex items-center justify-center gap-2"
+              transition flex items-center justify-center gap-2 cursor-pointer"
           >
             {loading ? (
               <div className="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full" />

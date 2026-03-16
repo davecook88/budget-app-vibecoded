@@ -52,7 +52,7 @@ export function TripBanner({ trip }: TripBannerProps) {
       </div>
       <button
         onClick={() => setActiveTrip(null)}
-        className="p-2 bg-white/20 rounded-full hover:bg-white/30 transition"
+        className="p-2 bg-white/20 rounded-full hover:bg-white/30 transition cursor-pointer"
       >
         <X className="w-4 h-4 text-white" />
       </button>
